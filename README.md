@@ -2,19 +2,22 @@
 
 **TODO: Add description**
 
+There are some problems building the vmq_commons dependency. Please see [issue 2](https://github.com/gausby/mqtt_tools/issues/2) for details and please give me a hint about a solution.
+
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+This project is not available on hex as of yet. It can be installed by adding the following to the project mix-file:
 
-  1. Add mqtt_tools to your list of dependencies in `mix.exs`:
+``` elixir
+  defp deps do
+    [{:mqtt_tools, github: "gausby/mqtt_tools"}]
+  end
+```
 
-        def deps do
-          [{:mqtt_tools, "~> 0.0.1"}]
-        end
+## License
 
-  2. Ensure mqtt_tools is started before your application:
+Work in progress.
 
-        def application do
-          [applications: [:mqtt_tools]]
-        end
+This project rely on work done by [Erlio GmbH Basel Switzerland](http://erl.io), in specific the dependency [vmq_commons](https://github.com/erlio/vmq_commons/) which is released under an [Apache 2.0](https://github.com/erlio/vmq_commons/blob/master/LICENSE.txt)-license. I (Martin Gausby) claim no copyright or ownership to any of this.
 
+Please notice that this is not a project run or owned by Erlio, so all support requests should be raised as [issues on the projects GitHub page](https://github.com/gausby/mqtt_tools/issues).
