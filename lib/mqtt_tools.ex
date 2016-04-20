@@ -147,9 +147,50 @@ defmodule MqttTools.GenEMQTT do
     end
   end
 
+  @typedoc "Return values of `start*` functions"
+  @type on_start :: {:ok, pid} | :ignore | {:error, {:already_started, pid} | term}
+
+  @typedoc "Debug options supported by the `start*` functions"
+  @type debug :: [:trace | :log | :statistics | {:log_to_file, Path.t}]
+
+  @typedoc "The GenEMQTT name"
+  @type name :: atom | {:global, term} | {:via, module, term}
+
+  @typedoc "Option values used by the `start*` functions"
+  @type option :: {:debug, debug} |
+                  {:name, name} |
+                  {:timeout, timeout} |
+                  {:spawn_opt, Process.spawn_opt}
+
+  @type options :: [option]
+
+  @spec start_link(module, any, options) :: on_start
+  def start_link(module, args, options \\ []) when is_atom(module) and is_list(options) do
+    case Keyword.pop(options, :name) do
+      {nil, opts} ->
+        :gen_emqtt.start_link(module, args, opts)
+      {name, opts} when is_atom(name) ->
+        :gen_emqtt.start_link({:local, name}, module, args, opts)
+      # todo, check if this works with process registries like gproc
+      {other, opts} when is_tuple(other) ->
+        :gen_emqtt.start_link(other, module, args, opts)
+    end
+  end
+
+  @spec start(module, any, options) :: on_start
+  def start(module, args, options \\ []) when is_atom(module) and is_list(options) do
+    case Keyword.pop(options, :name) do
+      {nil, opts} ->
+        :gen_emqtt.start(module, args, opts)
+      {name, opts} when is_atom(name) ->
+        :gen_emqtt.start({:local, name}, module, args, opts)
+      # todo, check if this works with process registries like gproc
+      {other, opts} when is_tuple(other) ->
+        :gen_emqtt.start(other, module, args, opts)
+    end
+  end
+
   # todo, implement delegates/helpers for:
-  # - start_link/3, start_link/4,
-  # - start/3, start/4,
   # - subscribe/2, subscribe/3,
   # - unsubscribe/2,
   # - publish/4,
