@@ -221,8 +221,13 @@ defmodule MqttTools.GenEMQTT do
   @doc """
   Publish `payload` to `topic` with quality of service set to `qos`
   """
-  #@spec
-  defdelegate publish(pid, topic, payload, qos), to: :gen_emqtt
+  @spec publish(pid, topic, payload :: binary, qos) :: :ok
+  def publish(pid, topic, payload, qos) when is_list(topic) do
+    :gen_emqtt.publish(pid, topic, payload, qos)
+  end
+  def publish(pid, topic, payload, qos) when is_binary(topic) do
+    publish(pid, [topic], payload, qos)
+  end
 
   @doc """
   Make a call to the underlying state machine
