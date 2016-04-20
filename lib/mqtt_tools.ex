@@ -148,7 +148,10 @@ defmodule MqttTools.GenEMQTT do
   end
 
   @typedoc "Return values of `start*` functions"
-  @type on_start :: {:ok, pid} | :ignore | {:error, {:already_started, pid} | term}
+  @type on_start ::
+    {:ok, pid} |
+    :ignore |
+    {:error, {:already_started, pid} | term}
 
   @typedoc "Debug options supported by the `start*` functions"
   @type debug :: [:trace | :log | :statistics | {:log_to_file, Path.t}]
@@ -164,6 +167,9 @@ defmodule MqttTools.GenEMQTT do
 
   @type options :: [option]
 
+  @doc """
+  Start a linked connection to a MQTT broker
+  """
   @spec start_link(module, any, options) :: on_start
   def start_link(module, args, options \\ []) when is_atom(module) and is_list(options) do
     case Keyword.pop(options, :name) do
@@ -177,6 +183,9 @@ defmodule MqttTools.GenEMQTT do
     end
   end
 
+  @doc """
+  Start an unlinked connection to a MQTT broker
+  """
   @spec start(module, any, options) :: on_start
   def start(module, args, options \\ []) when is_atom(module) and is_list(options) do
     case Keyword.pop(options, :name) do
@@ -190,9 +199,40 @@ defmodule MqttTools.GenEMQTT do
     end
   end
 
-  # todo, implement delegates/helpers for:
-  # - subscribe/2, subscribe/3,
-  # - unsubscribe/2,
-  # - publish/4,
-  # - call/2, cast/2
+  @doc """
+  Subscribe to one or multiple topics given a list of tuples containing
+  the topic name and its quality of service `[{"topic", 0}, ..]`
+  """
+  @spec subscribe(pid, [{topic :: binary, qos}]) :: :ok
+  defdelegate subscribe(pid, topics), to: :gen_emqtt
+
+  @doc """
+  Subscribe to `topic` with quality of service set to `qos`
+  """
+  @spec subscribe(pid, topic, qos) :: :ok
+  defdelegate subscribe(pid, topic, qos), to: :gen_emqtt
+
+  @doc """
+  Unsubscribe from one or more `topic`
+  """
+  @spec unsubscribe(pid, topic) :: :ok
+  defdelegate unsubscribe(pid, topic), to: :gen_emqtt
+
+  @doc """
+  Publish `payload` to `topic` with quality of service set to `qos`
+  """
+  #@spec
+  defdelegate publish(pid, topic, payload, qos), to: :gen_emqtt
+
+  @doc """
+  Make a call to the underlying state machine
+  """
+  @spec call(pid, request :: term) :: term
+  defdelegate call(pid, request), to: :gen_emqtt
+
+  @doc """
+  Make a cast to the underlying state machine
+  """
+  @spec cast(pid, request :: term) :: :ok
+  defdelegate cast(pid, request), to: :gen_emqtt
 end
