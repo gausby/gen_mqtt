@@ -27,6 +27,6 @@ defmodule MqttTools.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [{:vmq_commons, github: "erlio/vmq_commons", compile: "rebar3 compile", app: false}]
   end
 end
