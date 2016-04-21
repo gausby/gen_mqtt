@@ -15,6 +15,6 @@ defmodule GenMQTT.Mixfile do
   end
 
   defp deps do
-    [{:vmq_commons, github: "erlio/vmq_commons", compile: "rebar3 compile", app: false}]
+    [{:vmq_commons, github: "erlio/vmq_commons", manager: :rebar3}]
   end
 end

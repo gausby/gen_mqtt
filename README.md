@@ -2,15 +2,13 @@
 
 An Elixir behaviour that makes it possible to communicate with a MQTT broker.
 
-There are some problems building the vmq_commons dependency. Please see [issue 2](https://github.com/gausby/mqtt_tools/issues/2) for details and please give me a hint about a solution.
-
 ## Installation
 
 This project is not available on hex as of yet. It can be installed by adding the following to the project mix-file:
 
 ``` elixir
   defp deps do
-    [{:mqtt_tools, github: "gausby/mqtt_tools"}]
+    [{:gen_mqtt, github: "gausby/mqtt_tools"}]
   end
 ```
 
