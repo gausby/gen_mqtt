@@ -39,17 +39,16 @@ defmodule GenMQTT do
   @callback on_connect(state) ::
     {:ok, state} when state: term
 
-  @type connect_error_reason ::
-    :server_not_found |
-    :server_not_available |
-    :wrong_protocol_version |
-    :invalid_id |
-    :invalid_credentials |
-    :not_authorized
-  @callback on_connect_error(reason :: connect_error_reason, state)::
-    {:ok, state} when state: term
+  @callback on_connect_error(reason, state) ::
+    {:ok, state} when [state: term,
+                       reason: :server_not_found |
+                               :server_not_available |
+                               :wrong_protocol_version |
+                               :invalid_id |
+                               :invalid_credentials |
+                               :not_authorized]
 
-  @callback on_disconnect(state)::
+  @callback on_disconnect(state) ::
     {:ok, state} when state: term
 
   @callback on_subscribe([{topic, qos}], state) ::
