@@ -37,22 +37,29 @@ defmodule GenMQTT do
   @type qos :: 0 | 1 | 2
 
   @callback on_connect(state) ::
-    {:ok, state} when state: term # todo
+    {:ok, state} when state: term
 
-  @callback on_connect_error(reason :: term, state)::
-    {:ok, state} when state: term # todo
+  @type connect_error_reason ::
+    :server_not_found |
+    :server_not_available |
+    :wrong_protocol_version |
+    :invalid_id |
+    :invalid_credentials |
+    :not_authorized
+  @callback on_connect_error(reason :: connect_error_reason, state)::
+    {:ok, state} when state: term
 
   @callback on_disconnect(state)::
-    {:ok, state} when state: term # todo
+    {:ok, state} when state: term
 
   @callback on_subscribe([{topic, qos}], state) ::
-    {:ok, state} when state: term # todo
+    {:ok, state} when state: term
 
   @callback on_unsubscribe(topic, state) ::
-    {:ok, state} when state: term # todo
+    {:ok, state} when state: term
 
-  @callback on_publish(topic, msg :: binary, state) ::
-    {:ok, state} when state: term # todo
+  @callback on_publish(topic, payload :: binary, state) ::
+    {:ok, state} when state: term
 
   defmacro __using__(_) do
     quote location: :keep do
