@@ -8,7 +8,7 @@ This project is not available on hex as of yet. It can be installed by adding th
 
 ``` elixir
   defp deps do
-    [{:gen_mqtt, github: "gausby/mqtt_tools"}]
+    [{:gen_mqtt, github: "gausby/gen_mqtt"}]
   end
 ```
 
