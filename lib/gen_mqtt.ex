@@ -1,11 +1,4 @@
-defmodule MqttTools do
-
-end
-
-defmodule MqttTools.GenEMQTT do
-  @type from :: {pid, tag :: term}
-  @type state :: term
-
+defmodule GenMQTT do
   # these follows the gen_server specs ---------------------------------
   @callback init(state) ::
     {:ok, state} |
@@ -13,28 +6,29 @@ defmodule MqttTools.GenEMQTT do
     :ignore |
     {:stop, reason :: any} when state: any
 
+  @type from :: {pid, tag :: term}
   @callback handle_call(request :: term, from, state) ::
     {:reply, reply, new_state} |
     {:reply, reply, new_state, timeout | :hibernate} |
     {:noreply, new_state} |
     {:noreply, new_state, timeout | :hibernate} |
     {:stop, reason, reply, new_state} |
-    {:stop, reason, new_state} when reply: term, new_state: term, reason: term
+    {:stop, reason, new_state} when reply: term, state: term, new_state: term, reason: term
 
   @callback handle_cast(request :: term, state) ::
     {:noreply, new_state} |
     {:noreply, new_state, timeout | :hibernate} |
-    {:stop, reason :: term, new_state} when new_state: term
+    {:stop, reason :: term, new_state} when state: term, new_state: term
 
   @callback handle_info(msg :: :timeout | term, state) ::
     {:noreply, new_state} |
     {:noreply, new_state, timeout | :hibernate} |
-    {:stop, reason :: term, new_state} when new_state: term
+    {:stop, reason :: term, new_state} when state: term, new_state: term
 
   @callback terminate(reason, state) ::
-    term when reason: :normal | :shutdown | {:shutdown, term} | term
+    term when state: term, reason: :normal | :shutdown | {:shutdown, term} | term
 
-  @callback code_change(old_vsn, state, extra :: term) ::
+  @callback code_change(old_vsn, state :: term, extra :: term) ::
     {:ok, new_state :: term} |
     {:error, reason :: term} when old_vsn: term | {:down, term}
 
@@ -43,22 +37,22 @@ defmodule MqttTools.GenEMQTT do
   @type qos :: 0 | 1 | 2
 
   @callback on_connect(state) ::
-    {:ok, state} # todo
+    {:ok, state} when state: term # todo
 
   @callback on_connect_error(reason :: term, state)::
-    {:ok, state} # todo
+    {:ok, state} when state: term # todo
 
   @callback on_disconnect(state)::
-    {:ok, state} # todo
+    {:ok, state} when state: term # todo
 
   @callback on_subscribe([{topic, qos}], state) ::
-    {:ok, state} # todo
+    {:ok, state} when state: term # todo
 
   @callback on_unsubscribe(topic, state) ::
-    {:ok, state} # todo
+    {:ok, state} when state: term # todo
 
   @callback on_publish(topic, msg :: binary, state) ::
-    {:ok, state} # todo
+    {:ok, state} when state: term # todo
 
   defmacro __using__(_) do
     quote location: :keep do

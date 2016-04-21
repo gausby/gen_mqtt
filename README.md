@@ -1,6 +1,6 @@
-# MqttTools
+# GenMQTT
 
-**TODO: Add description**
+An Elixir behaviour that makes it possible to communicate with a MQTT broker.
 
 There are some problems building the vmq_commons dependency. Please see [issue 2](https://github.com/gausby/mqtt_tools/issues/2) for details and please give me a hint about a solution.
 
