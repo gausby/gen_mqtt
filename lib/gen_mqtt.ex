@@ -1,4 +1,51 @@
 defmodule GenMQTT do
+  @moduledoc """
+  A behaviour module for implementing MMQT client processes.
+
+  ## Example
+  todo
+
+  ## Callbacks
+
+  GenMQTT defines 12 callbacs, all of them are automatically defined
+  when you use GenMQTT in your module, letting you define the callbacks
+  you want to customize.
+
+  Six of the callbacks are similar to the ones you know from GenServer,
+  and the GenServer documentation should be consulted for info on these.
+  They are: `init/1`, `handle_call/3`, `handle_cast/2`, `handle_info/2`,
+  `terminate/2` and `code_change/3`.
+
+  The remaining six are specific to GenMQTT and deals with various
+  events in a MQTT life cycle:
+
+    * `on_connect/1` is run when the client connect or reconnect with
+      the broker.
+
+    * `on_connect_error/2` is triggered if the connection fails for
+      whatever reason.
+
+    * `on_disconnect/1` is run when the client disconnect from the MQTT
+      broker.
+
+    * `on_subscribe/2` run when the client subscribes to a topic.
+
+    * `on_unsubscribe/2` run when the client stop subscribing to a
+      topic.
+
+    * `on_publish/3` triggered everytime something is published to the
+      broker.
+
+  All callbacks are optional. A macro will define a default function for
+  undefined callbacks, so you only need to implement `on_publish/3` if
+  that is what you need.
+
+  ## Name Registration
+
+  A GenMQTT is bound to the same name registration rules as GenServers.
+  Read more about it in the Elixir GenServer docs.
+  """
+
   # these follows the gen_server specs ---------------------------------
   @callback init(state) ::
     {:ok, state} |
