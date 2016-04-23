@@ -14,18 +14,13 @@ defmodule GenMQTT do
           GenMQTT.start_link(__MODULE__, nil)
         end
 
-        def init(state) do
-          Process.send_after self, :after_init, 200
+        def on_connect(state) do
+          :ok = GenMQTT.subscribe(self, "temperature", 0)
           {:ok, state}
         end
 
-        def handle_info(:after_init, state) do
-          :ok = GenMQTT.subscribe(self, "temperature", 0)
-          {:noreply, state}
-        end
-
         def on_publish(["temperature"], message, state) do
-          IO.puts "It is #\{inspect message\} degress"
+          IO.puts "It is #\{inspect message\} degrees"
           {:ok, state}
         end
       end
