@@ -3,7 +3,35 @@ defmodule GenMQTT do
   A behaviour module for implementing MMQT client processes.
 
   ## Example
-  todo
+
+  This example assumes an MQTT server running on the localhost on
+  port 1883.
+
+      defmodule TemperatureLogger do
+        use GenMQTT
+
+        def start_link do
+          GenMQTT.start_link(__MODULE__, nil)
+        end
+
+        def init(state) do
+          Process.send_after self, :after_init, 200
+          {:ok, state}
+        end
+
+        def handle_info(:after_init, state) do
+          :ok = GenMQTT.subscribe(self, "temperature", 0)
+          {:noreply, state}
+        end
+
+        def on_publish(["temperature"], message, state) do
+          IO.puts "It is #\{inspect message\} degress"
+          {:ok, state}
+        end
+      end
+
+  This will log everything sent to the `temperature` topic to the
+  console.
 
   ## Callbacks
 
