@@ -20,7 +20,7 @@ defmodule GenMQTT do
         end
 
         def on_publish(["room", location, "temp"], message, state) do
-          IO.puts "It is #{message} degrees in #{location}"
+          IO.puts "It is #\{message\} degrees in #\{location\}"
           {:ok, state}
         end
       end
