@@ -11,22 +11,22 @@ defmodule GenMQTT do
         use GenMQTT
 
         def start_link do
-          GenMQTT.start_link(__MODULE__, nil)
+          GenMQTT.start_link(__MODULE__, nil, [client: "temperature example"])
         end
 
         def on_connect(state) do
-          :ok = GenMQTT.subscribe(self, "temperature", 0)
+          :ok = GenMQTT.subscribe(self, "room/+/temp", 0)
           {:ok, state}
         end
 
-        def on_publish(["temperature"], message, state) do
-          IO.puts "It is #\{inspect message\} degrees"
+        def on_publish(["room", location, "temp"], message, state) do
+          IO.puts "It is #{message} degrees in #{location}"
           {:ok, state}
         end
       end
 
-  This will log everything sent to the `temperature` topic to the
-  console.
+  This will log to the console every time a sensor post a temperature
+  to the broker.
 
   ## Callbacks
 
