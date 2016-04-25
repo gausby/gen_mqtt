@@ -70,6 +70,19 @@ defmodule GenMQTT do
   """
 
   # these follows the gen_server specs ---------------------------------
+  @doc """
+  Invoked when the server is started. `start_link` and `start` will
+  block until it returns. `state` is the second term passed into either
+  of the two start functions.
+
+  When this function returns `{:ok, state}` it will enter its loop and
+  will start receiving messages from the broker, or send messages to it
+  as soon as it has entered the connected state.
+
+  Returning `{:stop, reason}` will cause the start function to return
+  `{:error, reason}`, and the process will exit with `reason` without
+  entering its loop or calling `terminate/2`.
+  """
   @callback init(state) ::
     {:ok, state} |
     {:ok, state, timeout | :hibernate} |
