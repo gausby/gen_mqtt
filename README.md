@@ -9,11 +9,14 @@ This project is available on hex, and it can be installed by adding the followin
 
 ``` elixir
   defp deps do
-    [{:gen_mqtt, "~> 0.1.0"}]
+    [{:vmq_commons, github: "erlio/vmq_commons", manager: :rebar3},
+     {:gen_mqtt, "~> 0.1.0"}]
   end
 ```
 
-Notice, this project should follow [Semantic Versioning 2.0.0](http://semver.org), so you should be safe if you fix the version number to a specific major or minor version. The project might change, if something can be done smarter or if the underlying `:gen_emqtt` implementation changes radically.
+**Notice**, you will need to fetch the `:vmq_commons` package from GitHub for this module to work. `vmq_commons` needs to be added to the hex repository before this step can be omitted. I hope I can solve this issue soon.
+
+Also notice, this project should follow [Semantic Versioning 2.0.0](http://semver.org), so you should be safe if you fix the version number to a specific major or minor version. The project might change, if something can be done smarter or if the underlying `:gen_emqtt` implementation changes radically.
 
 
 ## Legal stuff

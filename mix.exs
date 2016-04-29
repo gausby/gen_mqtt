@@ -3,7 +3,7 @@ defmodule GenMQTT.Mixfile do
 
   def project do
     [app: :gen_mqtt,
-     version: "0.1.0",
+     version: "0.1.1",
      elixir: "~> 1.2",
      description: description,
      build_embedded: Mix.env == :prod,
@@ -23,7 +23,8 @@ defmodule GenMQTT.Mixfile do
     [maintainers: ["Martin Gausby"],
      licenses: ["Apache 2.0"],
      links: %{"GitHub" => "https://github.com/gausby/gen_mqtt",
-              "Issues" => "https://github.com/gausby/gen_mqtt/issues"},
+              "Issues" => "https://github.com/gausby/gen_mqtt/issues",
+              "Documentation" => "https://hexdocs.pm/gen_mqtt/readme.html"},
      files: ["lib", "README.md", "LICENSE", "mix.exs"]]
   end
 
