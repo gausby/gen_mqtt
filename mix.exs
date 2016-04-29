@@ -5,14 +5,30 @@ defmodule GenMQTT.Mixfile do
     [app: :gen_mqtt,
      version: "0.0.1",
      elixir: "~> 1.2",
+     description: description,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps,
-     docs: [extras: ["README.md"]]]
+     docs: [extras: ["README.md"]],
+     package: package]
+  end
+
+  def description do
+    """
+    An Elixir behaviour that makes it possible to communicate with a MQTT server
+    """
+  end
+
+  def package do
+    [maintainers: ["Martin Gausby"],
+     licenses: ["Apache 2.0"],
+     links: %{"GitHub" => "https://github.com/gausby/gen_mqtt",
+              "Issues" => "https://github.com/gausby/gen_mqtt/issues"},
+     files: ["lib", "README.md", "LICENSE", "mix.exs"]]
   end
 
   def application do
-    [applications: [:logger]]
+    []
   end
 
   defp deps do
