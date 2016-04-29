@@ -85,9 +85,9 @@ defmodule GenMQTTTest do
   end
 
   test "publish and receive" do
-    {:ok, pid1} = IntegrationTest.start_link(self, client: 'one')
+    {:ok, pid1} = IntegrationTest.start_link(self, client: "one")
     assert_receive :connected
-    {:ok, pid2} = IntegrationTest.start_link(self, client: 'two')
+    {:ok, pid2} = IntegrationTest.start_link(self, client: "two")
     assert_receive :connected
 
     # subscribe to a topic on one

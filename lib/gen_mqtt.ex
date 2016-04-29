@@ -255,6 +255,7 @@ defmodule GenMQTT do
   """
   @spec start_link(module, any, options) :: on_start
   def start_link(module, args, options \\ []) when is_atom(module) and is_list(options) do
+    options = normalize_options(options)
     case Keyword.pop(options, :name) do
       {nil, opts} ->
         :gen_emqtt.start_link(module, args, opts)
@@ -271,6 +272,7 @@ defmodule GenMQTT do
   """
   @spec start(module, any, options) :: on_start
   def start(module, args, options \\ []) when is_atom(module) and is_list(options) do
+    options = normalize_options(options)
     case Keyword.pop(options, :name) do
       {nil, opts} ->
         :gen_emqtt.start(module, args, opts)
@@ -280,6 +282,17 @@ defmodule GenMQTT do
       {other, opts} when is_tuple(other) ->
         :gen_emqtt.start(other, module, args, opts)
     end
+  end
+
+  @cast_to_char_list [:host, :client, :last_will_topic, :last_will_msg]
+  defp normalize_options(opts) do
+    Enum.map(opts, fn
+      {key, val} when is_binary(val) and key in @cast_to_char_list ->
+        {key, String.to_char_list(val)}
+
+      option ->
+        option
+    end)
   end
 
   @doc """
