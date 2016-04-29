@@ -19,7 +19,7 @@ defmodule GenMQTTTest do
     end
 
     def on_publish(topic, message, state) do
-      send state, {:published, topic, message}
+      send state, {:published, self, topic, message}
       {:ok, state}
     end
 
@@ -56,7 +56,7 @@ defmodule GenMQTTTest do
     assert_receive {:subscribed, [{"foo", 0}]}
 
     assert :ok = GenMQTT.publish(pid, "foo", "foo bar baz!", 0)
-    assert_receive {:published, ["foo"], "foo bar baz!"}
+    assert_receive {:published, ^pid, ["foo"], "foo bar baz!"}
   end
 
   test "subscribe and then unsubscribe" do
@@ -82,5 +82,20 @@ defmodule GenMQTTTest do
 
     assert :ok = GenMQTT.unsubscribe(pid, "foo")
     assert_receive {:unsubscribed, [["foo"]]}
+  end
+
+  test "publish and receive" do
+    {:ok, pid1} = IntegrationTest.start_link(self, client: 'one')
+    assert_receive :connected
+    {:ok, pid2} = IntegrationTest.start_link(self, client: 'two')
+    assert_receive :connected
+
+    # subscribe to a topic on one
+    assert :ok = GenMQTT.subscribe(pid1, "foo", 0)
+    assert_receive {:subscribed, [{"foo", 0}]}
+    assert :ok = GenMQTT.publish(pid2, "foo", "bar", 0)
+    # subscribing pid (pid1) should receive the message from
+    # the sender (pid2)
+    assert_receive {:published, ^pid1, ["foo"], "bar"}
   end
 end
