@@ -32,12 +32,10 @@ defmodule GenMQTT do
 
   GenMQTT defines 12 callbacs, all of them are automatically defined
   when you use GenMQTT in your module, letting you define the callbacks
-  you want to customize.
-
-  Six of the callbacks are similar to the ones you know from GenServer,
-  and the GenServer documentation should be consulted for info on these.
-  They are: `init/1`, `handle_call/3`, `handle_cast/2`, `handle_info/2`,
-  `terminate/2` and `code_change/3`.
+  you want to customize. Six of the callbacks are similar to the ones
+  you know from GenServer, and the GenServer documentation should be
+  consulted for info on these. They are: `init/1`, `handle_call/3`,
+  `handle_cast/2`, `handle_info/2`, `terminate/2`, and `code_change/3`.
 
   The remaining six are specific to GenMQTT and deals with various
   events in a MQTT life cycle:
@@ -71,7 +69,7 @@ defmodule GenMQTT do
 
   # these follows the gen_server specs ---------------------------------
   @doc """
-  Invoked when the server is started. `start_link` and `start` will
+  Invoked when the server is started. `start_link/3` and `start/3` will
   block until it returns. `state` is the second term passed into either
   of the two start functions.
 
