@@ -11,7 +11,7 @@ defmodule GenMQTT do
         use GenMQTT
 
         def start_link do
-          GenMQTT.start_link(__MODULE__, nil, [client: "temperature example"])
+          GenMQTT.start_link(__MODULE__, nil)
         end
 
         def on_connect(state) do
