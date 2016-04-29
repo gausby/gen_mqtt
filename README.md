@@ -18,7 +18,7 @@ This project is not available on hex as of yet. It can be installed by adding th
 
 This project rely on work done by [Erlio GmbH Basel Switzerland](http://erl.io), in specific the dependency [vmq_commons](https://github.com/erlio/vmq_commons/) which is released under an [Apache 2.0](https://github.com/erlio/vmq_commons/blob/master/LICENSE.txt)-license. This project, GenMQTT, is simply a wrapper on top of this work, and thus claim no copyright or ownership to any properties that belong to Erlio.
 
-**Please notice**: Being a third party module all bug reports found in it should be raised directly in the [issues on this projects GitHub page](https://github.com/gausby/mqtt_tools/issues), unless it is a issue found in vmq_commons.
+**Please notice**: Being a third party module all bug reports found in it should be raised directly in the [issues on this projects GitHub page](https://github.com/gausby/gen_mqtt/issues), unless it is a issue found in vmq_commons.
 
 
 ### License
