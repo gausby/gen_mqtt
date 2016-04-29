@@ -5,13 +5,15 @@ An Elixir behaviour that makes it possible to communicate with a MQTT broker.
 
 ## Installation
 
-This project is not available on hex as of yet. It can be installed by adding the following to the project mix-file:
+This project is available on hex, and it can be installed by adding the following to the project mix-file:
 
 ``` elixir
   defp deps do
-    [{:gen_mqtt, github: "gausby/gen_mqtt"}]
+    [{:gen_mqtt, "~> 0.1.0"}]
   end
 ```
+
+Notice, this project should follow [Semantic Versioning 2.0.0](http://semver.org), so you should be safe if you fix the version number to a specific major or minor version. The project might change, if something can be done smarter or if the underlying `:gen_emqtt` implementation changes radically.
 
 
 ## Legal stuff
