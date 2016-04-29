@@ -246,7 +246,21 @@ defmodule GenMQTT do
   @type option :: {:debug, debug} |
                   {:name, name} |
                   {:timeout, timeout} |
-                  {:spawn_opt, Process.spawn_opt}
+                  {:spawn_opt, Process.spawn_opt} |
+                  {:host, :inet.ip_address() | binary} |
+                  {:port, :inet.port_number()} |
+                  {:username, username :: binary | :undefined} |
+                  {:password, password :: binary | :undefined} |
+                  {:client, client_id :: binary} |
+                  {:clean_session, boolean} |
+                  {:last_will_topic, topic :: char_list | binary | :undefined} |
+                  {:last_will_msg, payload :: char_list | binary | :undefined} |
+                  {:last_will_qos, qos} |
+                  {:reconnect_timeout, pos_integer | :undefined} |
+                  {:keepalive_interval, pos_integer} |
+                  {:retry_interval, pos_integer} |
+                  {:proto_version, version :: pos_integer} |
+                  {:transport, :gen_tcp.socket() | :ssl.socket()}
 
   @type options :: [option]
 
