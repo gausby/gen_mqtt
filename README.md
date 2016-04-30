@@ -1,5 +1,8 @@
 # GenMQTT
 
+[![Hex.pm](https://img.shields.io/hexpm/l/gen_mqtt.svg "Apache 2.0 Licensed")](https://github.com/gausby/gen_mqtt/blob/master/LICENSE)
+[![Hex version](https://img.shields.io/hexpm/v/gen_mqtt.svg "Hex version")](https://hex.pm/packages/gen_mqtt)
+
 An Elixir behaviour that makes it possible to communicate with a MQTT broker.
 
 
