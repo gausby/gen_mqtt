@@ -117,9 +117,32 @@ defmodule GenMQTT do
   @type topic :: [binary] | binary
   @type qos :: 0 | 1 | 2
 
+  @doc """
+  Triggered when the client successfully establish a connection to the
+  broker. It will get run again if the client should disconnect from
+  the broker, i.e. it temporarily becomes unavailable for whatever
+  reason, if some numeral value has been set to the start option
+  `reconnect_timeout`.
+
+  ## Examples
+
+  Subscribe to a topic as soon as a connection has been made to the
+  broker:
+
+      def on_connect(state) do
+        :ok = GenMQTT.subscribe(self, "room/living-room/temp", 0)
+        {:ok, state}
+      end
+  """
   @callback on_connect(state) ::
     {:ok, state} when state: term
 
+  @doc """
+  Callback triggered if there was some problem while connecting to the
+  broker. The `reason` is given as the first argument as an atom, making
+  it possible to pattern match and react. The second argument is the
+  process state.
+  """
   @callback on_connect_error(reason, state) ::
     {:ok, state} when [state: term,
                        reason: :server_not_found |
@@ -129,15 +152,45 @@ defmodule GenMQTT do
                                :invalid_credentials |
                                :not_authorized]
 
+  @doc """
+  Callback triggered when the client disconnects from the broker for
+  whatever reason.
+  """
   @callback on_disconnect(state) ::
     {:ok, state} when state: term
 
+  @doc """
+  Callback triggered when the client successfully subscribe to one or
+  more topics.
+
+  The subscriptions are given in tuples containing the topic name and
+  its quality of service.
+  """
   @callback on_subscribe([{topic, qos}], state) ::
     {:ok, state} when state: term
 
+  @doc """
+  Callback triggered when the client successfully unsubscribe from one
+  or more subscriptions. It will receive the no longer subscribed
+  subscriptions as a list of binaries as the first argument, and the
+  process state as the second.
+  """
   @callback on_unsubscribe(topic, state) ::
     {:ok, state} when state: term
 
+  @doc """
+  Callback triggered when a message has been published to a topic the
+  client subscribe to.
+
+  ## Examples
+
+  The following will print the messages sent to the topic `room/+/temp`.
+
+      def on_publish(["room", room, "temp"], temperature, state) do
+        IO.puts "It is #\{temperature\} degrees in #\{room\}""
+        {:ok, state}
+      end
+  """
   @callback on_publish(topic, payload :: binary, state) ::
     {:ok, state} when state: term
 
