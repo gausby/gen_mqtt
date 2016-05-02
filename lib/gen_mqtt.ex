@@ -326,7 +326,6 @@ defmodule GenMQTT do
         :gen_emqtt.start_link(module, args, opts)
       {name, opts} when is_atom(name) ->
         :gen_emqtt.start_link({:local, name}, module, args, opts)
-      # todo, check if this works with process registries like gproc
       {other, opts} when is_tuple(other) ->
         :gen_emqtt.start_link(other, module, args, opts)
     end
@@ -343,7 +342,6 @@ defmodule GenMQTT do
         :gen_emqtt.start(module, args, opts)
       {name, opts} when is_atom(name) ->
         :gen_emqtt.start({:local, name}, module, args, opts)
-      # todo, check if this works with process registries like gproc
       {other, opts} when is_tuple(other) ->
         :gen_emqtt.start(other, module, args, opts)
     end
