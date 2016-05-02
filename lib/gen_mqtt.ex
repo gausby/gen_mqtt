@@ -290,7 +290,7 @@ defmodule GenMQTT do
   @typedoc "Debug options supported by the `start*` functions"
   @type debug :: [:trace | :log | :statistics | {:log_to_file, Path.t}]
 
-  @typedoc "The GenEMQTT name"
+  @typedoc "The GenMQTT process name"
   @type name :: atom | {:global, term} | {:via, module, term}
 
   @typedoc "Option values used by the `start*` functions"
