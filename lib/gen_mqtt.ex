@@ -317,6 +317,46 @@ defmodule GenMQTT do
 
   @doc """
   Start a linked connection to a MQTT broker
+
+  ## Options
+
+    * `:host` the host name or ip address of the MQTT broker
+
+    * `:port` the port number the MQTT broker is running on
+
+    * `:username` the name of the user on the MQTT broker, defaults to
+      `undefined`.
+
+    * `:password` the password for the user on the MQTT broker.
+
+    * `:client` the client id. Notice that all connected clients should
+      have a unique client id as most MQTT brokers
+
+    * `:clean_session`
+
+    * `:last_will_topic` topic to sent to if the MQTT client disappears
+      from the broker.
+
+    * `:last_will_msg` the message that will get sent to
+      `last_will_topic` if the client dissapears from the broker.
+
+    * `:last_will_qos` the quality of service the last will message
+      should get sent with.
+
+    * `:reconnect_timeout` the number of seconds the client will wait
+      for a connection when attempting to reconnect to a broker.
+
+    * `:keepalive_interval` the number of seconds between keep alives
+
+    * `:retry_interval` the number of seconds between reconnection
+      attepts if the client disconnects from the broker.
+
+    * `:proto_version` which MQTT protocol version to use, defaults
+      to version `3`
+
+    * `:transport` the network transport the client should use to
+      communicate with the broker. defaults to `:gen_tcp`
+
   """
   @spec start_link(module, any, options) :: on_start
   def start_link(module, args, options \\ []) when is_atom(module) and is_list(options) do
@@ -332,7 +372,9 @@ defmodule GenMQTT do
   end
 
   @doc """
-  Start an unlinked connection to a MQTT broker
+  Starts a `GenMQTT` process without links (outside of a supervision tree).
+
+  See `start_link/3` for more information.
   """
   @spec start(module, any, options) :: on_start
   def start(module, args, options \\ []) when is_atom(module) and is_list(options) do
