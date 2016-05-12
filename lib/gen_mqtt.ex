@@ -320,6 +320,8 @@ defmodule GenMQTT do
 
   ## Options
 
+    * `:name` the name given to the process
+
     * `:host` the host name or ip address of the MQTT broker
 
     * `:port` the port number the MQTT broker is running on
