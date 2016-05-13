@@ -320,21 +320,26 @@ defmodule GenMQTT do
 
   ## Options
 
-    * `:name` the name given to the process
+    * `:name` the name given to the process.
 
-    * `:host` the host name or ip address of the MQTT broker
+    * `:host` the host name or ip address of the MQTT broker.
 
-    * `:port` the port number the MQTT broker is running on
+    * `:port` the port number the MQTT broker is running on given as an
+      integer. This will default to `1883`.
 
     * `:username` the name of the user on the MQTT broker, defaults to
-      `undefined`.
+      undefined and is not needed if it connect to a broker that allows
+      anonymous connections.
 
-    * `:password` the password for the user on the MQTT broker.
+    * `:password` the password for the user on the MQTT broker. This can
+      be omitted if the broker accept anonymous connections.
 
     * `:client` the client id. Notice that all connected clients should
-      have a unique client id as most MQTT brokers
+      have a unique client id as most MQTT brokers. This defaults to
+      `emqttc`. It is recommended to always specify a client id; and the
+      client id should be no longer than 23 characters long.
 
-    * `:clean_session`
+    * `:clean_session` boolean value, defaults to `true`.
 
     * `:last_will_topic` topic to sent to if the MQTT client disappears
       from the broker.
@@ -343,21 +348,22 @@ defmodule GenMQTT do
       `last_will_topic` if the client dissapears from the broker.
 
     * `:last_will_qos` the quality of service the last will message
-      should get sent with.
+      should get sent with. This should be specified as an integer value
+      between 0 and 2, and it defaults to `0`.
 
     * `:reconnect_timeout` the number of seconds the client will wait
       for a connection when attempting to reconnect to a broker.
 
-    * `:keepalive_interval` the number of seconds between keep alives
+    * `:keepalive_interval` the number of seconds between keep alives.
 
     * `:retry_interval` the number of seconds between reconnection
       attepts if the client disconnects from the broker.
 
     * `:proto_version` which MQTT protocol version to use, defaults
-      to version `3`
+      to version `3`.
 
     * `:transport` the network transport the client should use to
-      communicate with the broker. defaults to `:gen_tcp`
+      communicate with the broker. The default transport is `:gen_tcp`.
 
   """
   @spec start_link(module, any, options) :: on_start
