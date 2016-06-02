@@ -128,4 +128,13 @@ defmodule GenMQTTTest do
       ModuleWithOptions.start password: "foo"
     end
   end
+
+  test "register a process using a third-party process registry" do
+    :ok = Application.ensure_started(:gproc)
+    name = {:n, :l, :test}
+    process_name = {:via, :gproc, name}
+
+    {:ok, pid} = ModuleWithOptions.start_link(name: process_name)
+    assert {^pid, :undefined} = :gproc.await(name, 1000)
+  end
 end

@@ -34,6 +34,7 @@ defmodule GenMQTT.Mixfile do
   defp deps do
     [{:vmq_commons, github: "erlio/vmq_commons", manager: :rebar3},
      {:ex_doc, "~> 0.11", only: :dev},
-     {:earmark, "~> 0.1", only: :dev}]
+     {:earmark, "~> 0.1", only: :dev},
+     {:gproc, "~> 0.5.0", only: :test}]
   end
 end
