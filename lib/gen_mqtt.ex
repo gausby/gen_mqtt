@@ -368,15 +368,7 @@ defmodule GenMQTT do
   """
   @spec start_link(module, any, options) :: on_start
   def start_link(module, args, options \\ []) when is_atom(module) and is_list(options) do
-    options = normalize_options(options)
-    case Keyword.pop(options, :name) do
-      {nil, opts} ->
-        :gen_emqtt.start_link(module, args, opts)
-      {name, opts} when is_atom(name) ->
-        :gen_emqtt.start_link({:local, name}, module, args, opts)
-      {other, opts} when is_tuple(other) ->
-        :gen_emqtt.start_link(other, module, args, opts)
-    end
+    do_start(options, :start_link, module, args)
   end
 
   @doc """
@@ -386,14 +378,22 @@ defmodule GenMQTT do
   """
   @spec start(module, any, options) :: on_start
   def start(module, args, options \\ []) when is_atom(module) and is_list(options) do
-    options = normalize_options(options)
+    do_start(options, :start, module, args)
+  end
+
+  defp do_start(options, mode, module, args) do
+    options =
+      options
+      |> normalize_options
+      |> validate_options
+
     case Keyword.pop(options, :name) do
       {nil, opts} ->
-        :gen_emqtt.start(module, args, opts)
+        apply(:gen_emqtt, mode, [module, args, opts])
       {name, opts} when is_atom(name) ->
-        :gen_emqtt.start({:local, name}, module, args, opts)
+        apply(:gen_emqtt, mode, [{:local, name}, module, args, opts])
       {other, opts} when is_tuple(other) ->
-        :gen_emqtt.start(other, module, args, opts)
+        apply(:gen_emqtt, mode, [other, module, args, opts])
     end
   end
 
@@ -406,6 +406,23 @@ defmodule GenMQTT do
       option ->
         option
     end)
+  end
+
+  defp validate_options(opts) do
+    case {opts[:username], opts[:password]} do
+      {nil, nil} ->
+        # anonymous login
+        opts
+
+      {_username, nil} ->
+        raise ArgumentError, message: "`username` set but no `password` was given"
+
+      {nil, _passwd} ->
+        raise ArgumentError, message: "`password` set but no `username` was given"
+
+      {_username, _passwd} ->
+        opts
+    end
   end
 
   @doc """

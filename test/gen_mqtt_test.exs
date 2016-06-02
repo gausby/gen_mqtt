@@ -98,4 +98,34 @@ defmodule GenMQTTTest do
     # the sender (pid2)
     assert_receive {:published, ^pid1, ["foo"], "bar"}
   end
+
+  defmodule ModuleWithOptions do
+    use GenMQTT
+
+    def start_link(opts) do
+      GenMQTT.start_link(__MODULE__, :na, opts)
+    end
+
+    def start(opts) do
+      GenMQTT.start(__MODULE__, :na, opts)
+    end
+  end
+
+  test "init with username but with no password should raise" do
+    assert_raise ArgumentError, fn ->
+      ModuleWithOptions.start_link username: "foo"
+    end
+    assert_raise ArgumentError, fn ->
+      ModuleWithOptions.start username: "foo"
+    end
+  end
+
+  test "init with password but with no user name should raise" do
+    assert_raise ArgumentError, fn ->
+      ModuleWithOptions.start_link password: "foo"
+    end
+    assert_raise ArgumentError, fn ->
+      ModuleWithOptions.start password: "foo"
+    end
+  end
 end
