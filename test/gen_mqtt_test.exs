@@ -32,6 +32,14 @@ defmodule GenMQTTTest do
       send state, {:unsubscribed, subscription}
       {:ok, state}
     end
+
+    def terminate(:normal, state) do
+      send state, :shutdown
+      :ok
+    end
+    def terminate(_reason, _state) do
+      :ok
+    end
   end
 
   test "should be able to link a process" do
@@ -97,6 +105,31 @@ defmodule GenMQTTTest do
     # subscribing pid (pid1) should receive the message from
     # the sender (pid2)
     assert_receive {:published, ^pid1, ["foo"], "bar"}
+  end
+
+  test "connect and then disconnect" do
+    {:ok, pid} = IntegrationTest.start_link(self, client: "three")
+    assert_receive :connected
+    assert :ok = GenMQTT.disconnect(pid)
+    assert_receive :shutdown
+  end
+
+  test "using info_fun" do
+    parent = self
+    opts =
+      [client: "four",
+       info_fun: {
+       fn({event, _message_id}, state) ->
+         send parent, event
+         [event|state]
+       end, []}]
+
+    {:ok, pid} = IntegrationTest.start_link(self, opts)
+    assert_receive :connack_in
+    assert_receive :connected
+    assert :ok = GenMQTT.disconnect(pid)
+    assert_receive :connect_out
+    assert_receive :shutdown
   end
 
   defmodule ModuleWithOptions do
