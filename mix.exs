@@ -10,6 +10,8 @@ defmodule GenMQTT.Mixfile do
      start_permanent: Mix.env == :prod,
      deps: deps,
      docs: [extras: ["README.md"]],
+     dialyzer: [plt_add_apps: [:vmq_commons, :gen_tcp, :ssl],
+                paths: ["_build/dev/lib/gen_mqtt/ebin", "_build/dev/lib/vmq_commons/ebin"]],
      package: package]
   end
 
@@ -35,6 +37,7 @@ defmodule GenMQTT.Mixfile do
     [{:vmq_commons, github: "erlio/vmq_commons", manager: :rebar3},
      {:ex_doc, "~> 0.11", only: :dev},
      {:earmark, "~> 0.1", only: :dev},
-     {:gproc, "~> 0.5.0", only: :test}]
+     {:gproc, "~> 0.5.0", only: :test},
+     {:dialyxir, "~> 0.3.3", only: [:dev, :test]}]
   end
 end
