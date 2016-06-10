@@ -13,7 +13,7 @@ This project is available on hex, and it can be installed by adding the followin
 ``` elixir
   defp deps do
     [{:vmq_commons, github: "erlio/vmq_commons", manager: :rebar3},
-     {:gen_mqtt, "~> 0.1.0"}]
+     {:gen_mqtt, "~> 0.2.0"}]
   end
 ```
 
