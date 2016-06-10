@@ -293,6 +293,21 @@ defmodule GenMQTT do
   @typedoc "The GenMQTT process name"
   @type name :: atom | {:global, term} | {:via, module, term}
 
+  @type info_action :: :connack_in |
+                       :connect_out |
+                       :puback_in | :puback_out |
+                       :pubcomp_in | :pubcomp_out |
+                       :publish_in | :publish_out |
+                       :pubrec_in | :pubrec_out |
+                       :pubrel_in | :pubrel_out |
+                       :reconnect |
+                       :suback | :subscribe_out |
+                       :unsuback | :unsubscribe_out
+  @type info_fun :: {
+    ({info_action, message_id :: char_list}, state :: term -> new_state :: term),
+    initial_state :: term
+  }
+
   @typedoc "Option values used by the `start*` functions"
   @type option :: {:debug, debug} |
                   {:name, name} |
@@ -311,6 +326,7 @@ defmodule GenMQTT do
                   {:keepalive_interval, pos_integer} |
                   {:retry_interval, pos_integer} |
                   {:proto_version, version :: pos_integer} |
+                  {:info_fun, info_fun} |
                   {:transport, :gen_tcp.socket() | :ssl.socket()}
 
   @type options :: [option]
@@ -364,6 +380,10 @@ defmodule GenMQTT do
 
     * `:transport` the network transport the client should use to
       communicate with the broker. The default transport is `:gen_tcp`.
+
+    * `info_fun` a function that can be passed in for logging,
+      benchmarking, debugging, etc. It should not be used in
+      production.
 
   """
   @spec start_link(module, any, options) :: on_start
@@ -424,6 +444,16 @@ defmodule GenMQTT do
         opts
     end
   end
+
+  @doc """
+  Disconnect from the MQTT broker and stop the process.
+
+  `on_disconnect/1` will not be triggered, if something needs to be
+  clearned up it can be done in the `terminate/2` callback, and the
+  shutdown reason will be `:normal`
+  """
+  @spec disconnect(pid) :: :ok
+  defdelegate disconnect(pid), to: :gen_emqtt
 
   @doc """
   Subscribe to one or multiple topics given a list of tuples containing
