@@ -3,14 +3,14 @@ defmodule GenMQTT.Mixfile do
 
   def project do
     [app: :gen_mqtt,
-     version: "0.2.0",
+     version: "0.2.1",
      elixir: "~> 1.2",
      description: description,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps,
      docs: [extras: ["README.md"]],
-     dialyzer: [plt_add_apps: [:vmq_commons, :gen_tcp, :ssl],
+     dialyzer: [plt_add_apps: [:kernel, :vmq_commons],
                 paths: ["_build/dev/lib/gen_mqtt/ebin", "_build/dev/lib/vmq_commons/ebin"]],
      package: package]
   end
