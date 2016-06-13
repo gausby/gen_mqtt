@@ -327,7 +327,7 @@ defmodule GenMQTT do
                   {:retry_interval, pos_integer} |
                   {:proto_version, version :: pos_integer} |
                   {:info_fun, info_fun} |
-                  {:transport, :gen_tcp.socket() | :ssl.socket()}
+                  {:transport, {:gen_tcp, config :: list} | {:ssl, config :: list}}
 
   @type options :: [option]
 
@@ -379,7 +379,10 @@ defmodule GenMQTT do
       to version `3`.
 
     * `:transport` the network transport the client should use to
-      communicate with the broker. The default transport is `:gen_tcp`.
+      communicate with the broker and its respective options.
+      The default transport is `{:gen_tcp, []}`. For basic SSL support
+      use `{:ssl, ssl_options}`, which can be configured according to the
+      erlang documentation on the `:ssl` module.
 
     * `info_fun` a function that can be passed in for logging,
       benchmarking, debugging, etc. It should not be used in
