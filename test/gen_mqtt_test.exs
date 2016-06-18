@@ -93,22 +93,21 @@ defmodule GenMQTTTest do
   end
 
   test "publish and receive" do
-    {:ok, pid1} = IntegrationTest.start_link(self, client: "one")
+    {:ok, pid1} = IntegrationTest.start_link(self)
     assert_receive :connected
-    {:ok, pid2} = IntegrationTest.start_link(self, client: "two")
+    {:ok, pid2} = IntegrationTest.start_link(self)
     assert_receive :connected
 
-    # subscribe to a topic on one
+    # subscribe to a topic on pid1
     assert :ok = GenMQTT.subscribe(pid1, "foo", 0)
     assert_receive {:subscribed, [{"foo", 0}]}
     assert :ok = GenMQTT.publish(pid2, "foo", "bar", 0)
-    # subscribing pid (pid1) should receive the message from
-    # the sender (pid2)
+    # pid1 should receive the message published by pid2
     assert_receive {:published, ^pid1, ["foo"], "bar"}
   end
 
   test "connect and then disconnect" do
-    {:ok, pid} = IntegrationTest.start_link(self, client: "three")
+    {:ok, pid} = IntegrationTest.start_link(self)
     assert_receive :connected
     assert :ok = GenMQTT.disconnect(pid)
     assert_receive :shutdown
@@ -117,12 +116,10 @@ defmodule GenMQTTTest do
   test "using info_fun" do
     parent = self
     opts =
-      [client: "four",
-       info_fun: {
-       fn({event, _message_id}, state) ->
-         send parent, event
-         [event|state]
-       end, []}]
+      [info_fun: {fn({event, _message_id}, state) ->
+                   send parent, event
+                   [event|state]
+                 end, []}]
 
     {:ok, pid} = IntegrationTest.start_link(self, opts)
     assert_receive :connack_in

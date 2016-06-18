@@ -350,10 +350,11 @@ defmodule GenMQTT do
     * `:password` the password for the user on the MQTT broker. This can
       be omitted if the broker accept anonymous connections.
 
-    * `:client` the client id. Notice that all connected clients should
-      have a unique client id as most MQTT brokers. This defaults to
-      `emqttc`. It is recommended to always specify a client id; and the
-      client id should be no longer than 23 characters long.
+    * `:client` the client id. A randomly generated client id will be
+      used if this is option is blank. Notice that all connected
+      clients should have an unique client id. Should you choose to
+      generate your own client id it should be no longer than 23
+      characters, unless the broker supports longer client ids.
 
     * `:clean_session` boolean value, defaults to `true`.
 
@@ -408,6 +409,7 @@ defmodule GenMQTT do
     options =
       options
       |> normalize_options
+      |> generate_client_id
       |> validate_options
 
     case Keyword.pop(options, :name) do
@@ -429,6 +431,25 @@ defmodule GenMQTT do
       option ->
         option
     end)
+  end
+
+  # If no client id is set we will provide a randomly generated one.
+  # Notice that we need to keep the client name below 23 chars because
+  # the MQTT specs says so.
+  #
+  # Notice that we will not attempt any validation on the length of
+  # user generated client ids because some MQTT servers may allow for
+  # longer names.
+  defp generate_client_id(opts) do
+    case opts[:client] do
+      nil ->
+        client_name =
+          10 |> :crypto.strong_rand_bytes |> Base.encode16
+        Keyword.put(opts, :client, client_name)
+
+      _ ->
+        opts
+    end
   end
 
   defp validate_options(opts) do

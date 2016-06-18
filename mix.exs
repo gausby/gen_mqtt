@@ -3,7 +3,7 @@ defmodule GenMQTT.Mixfile do
 
   def project do
     [app: :gen_mqtt,
-     version: "0.2.1",
+     version: "0.2.2",
      elixir: "~> 1.2",
      description: description,
      build_embedded: Mix.env == :prod,
