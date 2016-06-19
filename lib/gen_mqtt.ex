@@ -1,5 +1,5 @@
 defmodule GenMQTT do
-  @moduledoc """
+  @moduledoc ~S"""
   A behaviour module for implementing MMQT client processes.
 
   ## Example
@@ -177,7 +177,7 @@ defmodule GenMQTT do
   @callback on_unsubscribe(topic, state) ::
     {:ok, state} when state: term
 
-  @doc """
+  @doc ~S"""
   Callback triggered when a message has been published to a topic the
   client subscribes to.
 
@@ -339,33 +339,37 @@ defmodule GenMQTT do
 
     * `:host` the host name or ip address of the MQTT broker.
 
-    * `:port` the port number the MQTT broker is running on given as an
-      integer. This will default to `1883`.
+    * `:port` the port number the MQTT broker is running on given as
+      an integer. This will default to `1883`.
 
     * `:username` the name of the user on the MQTT broker, defaults to
-      undefined and is not needed if it connect to a broker that allows
-      anonymous connections.
+      undefined and is not needed if it connect to a broker that
+      allows anonymous connections.
 
-    * `:password` the password for the user on the MQTT broker. This can
-      be omitted if the broker accepts anonymous connections.
+    * `:password` the password for the user on the MQTT broker. This
+      can be omitted if the broker accepts anonymous connections.
 
     * `:client` the client ID. A randomly generated client ID will be
-      used if this is option is not supplied. Notice that all connected
-      clients should have a unique client id. Should you choose to
-      generate your own client ID it should be no longer than 23
-      characters <insert reason>, unless the broker supports longer client ids.
+      used if this is option is not supplied. Notice that all
+      connected clients should have a unique client id. Should you
+      choose to generate your own client ID it should be no longer
+      than 23 characters, unless the broker supports longer client
+      ids. The requirements for a client id is described in the MQTT
+      specifications:
+
+        - http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc385349242
 
     * `:clean_session` boolean value, defaults to `true`.
 
-    * `:last_will_topic` topic to send message to if the MQTT client disappears
-      from the broker.
+    * `:last_will_topic` topic to send message to if the MQTT client
+      disappears from the broker.
 
     * `:last_will_msg` the message that will get sent to
       `last_will_topic` if the client disappears from the broker.
 
     * `:last_will_qos` the quality of service the last will message
-      should get sent with. This should be specified as an integer value
-      between 0 and 2. It defaults to `0`.
+      should get sent with. This should be specified as an integer
+      value between 0 and 2. It defaults to `0`.
 
     * `:reconnect_timeout` the number of seconds the client will wait
       for a connection when attempting to reconnect to a broker.
@@ -375,19 +379,20 @@ defmodule GenMQTT do
     * `:retry_interval` the number of seconds between reconnection
       attempts if the client disconnects from the broker.
 
-    * `:proto_version` which MQTT protocol version to use, defaults
-      to version `3`.
+    * `:proto_version` which MQTT protocol version to use, defaults to
+      version `3`.
 
     * `:transport` the network transport the client should use to
-      communicate with the broker and its respective options.
-      The default transport is `{:gen_tcp, []}`. For basic SSL support
-      use `{:ssl, ssl_options}`, which can be configured according to the
-      erlang documentation on the `:ssl` module. <insert link to docs>
+      communicate with the broker and its respective options.  The
+      default transport is `{:gen_tcp, []}`. For basic SSL support use
+      `{:ssl, ssl_options}`, which can be configured according to the
+      Erlang documentation on the `:ssl` module:
+      http://erlang.org/documentation/doc-1/man/ssl.html
 
     * `info_fun` a function that can be passed in for logging,
-      benchmarking, debugging, etc. It should not be used in
-      production. <insert example - usage is not clear, also what args?>
-
+      benchmarks, debugging, etc. It should not be used in production.
+      Please refer to the unit tests of this project for a simple
+      example of usage.
   """
   @spec start_link(module, any, options) :: on_start
   def start_link(module, args, options \\ []) when is_atom(module) and is_list(options) do
@@ -433,8 +438,10 @@ defmodule GenMQTT do
   end
 
   # If no client ID is set we will provide a randomly generated one.
-  # Notice that we need to keep the client name below 23 chars because
-  # the MQTT specs says so. <insert link to spec>
+  # Notice that we need to keep the client name below 23 chars
+  # according to the MQTT specs:
+  #
+  # http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc385349242
   #
   # Notice that we will not attempt any validation on the length of
   # user generated client ids because some MQTT servers may allow for
