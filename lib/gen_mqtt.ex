@@ -4,8 +4,7 @@ defmodule GenMQTT do
 
   ## Example
 
-  This example assumes an MQTT server running on the localhost on
-  port 1883.
+  This example assumes an MQTT server running on localhost on port 1883.
 
       defmodule TemperatureLogger do
         use GenMQTT
@@ -25,33 +24,33 @@ defmodule GenMQTT do
         end
       end
 
-  This will log to the console every time a sensor post a temperature
+  This will log to the console every time a sensor posts a temperature
   to the broker.
 
   ## Callbacks
 
-  GenMQTT defines 12 callbacs, all of them are automatically defined
+  GenMQTT defines 12 callbacks, all of them are automatically defined
   when you use GenMQTT in your module, letting you define the callbacks
   you want to customize. Six of the callbacks are similar to the ones
   you know from GenServer, and the GenServer documentation should be
   consulted for info on these. They are: `init/1`, `handle_call/3`,
   `handle_cast/2`, `handle_info/2`, `terminate/2`, and `code_change/3`.
 
-  The remaining six are specific to GenMQTT and deals with various
+  The remaining six are specific to GenMQTT and deal with various
   events in a MQTT life cycle:
 
-    * `on_connect/1` is run when the client connect or reconnect with
+    * `on_connect/1` is run when the client connects or reconnects with
       the broker.
 
     * `on_connect_error/2` is triggered if the connection fails for
       whatever reason.
 
-    * `on_disconnect/1` is run when the client disconnect from the MQTT
+    * `on_disconnect/1` is run when the client disconnects from the MQTT
       broker.
 
     * `on_subscribe/2` run when the client subscribes to a topic.
 
-    * `on_unsubscribe/2` run when the client stop subscribing to a
+    * `on_unsubscribe/2` run when the client stops subscribing to a
       topic.
 
     * `on_publish/3` triggered everytime something is published to the
@@ -64,10 +63,10 @@ defmodule GenMQTT do
   ## Name Registration
 
   A GenMQTT is bound to the same name registration rules as GenServers.
-  Read more about it in the Elixir GenServer docs.
+  Read more about it in the Elixir `GenServer` docs.
   """
 
-  # these follows the gen_server specs ---------------------------------
+  # gen_server ---------------------------------------------------------
   @doc """
   Invoked when the server is started. `start_link/3` and `start/3` will
   block until it returns. `state` is the second term passed into either
@@ -138,8 +137,8 @@ defmodule GenMQTT do
     {:ok, state} when state: term
 
   @doc """
-  Callback triggered if there was some problem while connecting to the
-  broker. The `reason` is given as the first argument as an atom, making
+  Callback triggered if there was a problem connecting to the broker.
+  The `reason` is given as the first argument as an atom, making
   it possible to pattern match and react. The second argument is the
   process state.
   """
@@ -160,7 +159,7 @@ defmodule GenMQTT do
     {:ok, state} when state: term
 
   @doc """
-  Callback triggered when the client successfully subscribe to one or
+  Callback triggered when the client successfully subscribes to one or
   more topics.
 
   The subscriptions are given in tuples containing the topic name and
@@ -170,8 +169,8 @@ defmodule GenMQTT do
     {:ok, state} when state: term
 
   @doc """
-  Callback triggered when the client successfully unsubscribe from one
-  or more subscriptions. It will receive the no longer subscribed
+  Callback triggered when the client successfully unsubscribes from one
+  or more subscriptions. It will receive the unsubscribed
   subscriptions as a list of binaries as the first argument, and the
   process state as the second.
   """
@@ -180,14 +179,14 @@ defmodule GenMQTT do
 
   @doc """
   Callback triggered when a message has been published to a topic the
-  client subscribe to.
+  client subscribes to.
 
   ## Examples
 
   The following will print the messages sent to the topic `room/+/temp`.
 
       def on_publish(["room", room, "temp"], temperature, state) do
-        IO.puts "It is #\{temperature\} degrees in #\{room\}""
+        IO.puts "It is #{temperature} degrees in #{room}"
         {:ok, state}
       end
   """
@@ -348,25 +347,25 @@ defmodule GenMQTT do
       anonymous connections.
 
     * `:password` the password for the user on the MQTT broker. This can
-      be omitted if the broker accept anonymous connections.
+      be omitted if the broker accepts anonymous connections.
 
-    * `:client` the client id. A randomly generated client id will be
-      used if this is option is blank. Notice that all connected
-      clients should have an unique client id. Should you choose to
-      generate your own client id it should be no longer than 23
-      characters, unless the broker supports longer client ids.
+    * `:client` the client ID. A randomly generated client ID will be
+      used if this is option is not supplied. Notice that all connected
+      clients should have a unique client id. Should you choose to
+      generate your own client ID it should be no longer than 23
+      characters <insert reason>, unless the broker supports longer client ids.
 
     * `:clean_session` boolean value, defaults to `true`.
 
-    * `:last_will_topic` topic to sent to if the MQTT client disappears
+    * `:last_will_topic` topic to send message to if the MQTT client disappears
       from the broker.
 
     * `:last_will_msg` the message that will get sent to
-      `last_will_topic` if the client dissapears from the broker.
+      `last_will_topic` if the client disappears from the broker.
 
     * `:last_will_qos` the quality of service the last will message
       should get sent with. This should be specified as an integer value
-      between 0 and 2, and it defaults to `0`.
+      between 0 and 2. It defaults to `0`.
 
     * `:reconnect_timeout` the number of seconds the client will wait
       for a connection when attempting to reconnect to a broker.
@@ -374,7 +373,7 @@ defmodule GenMQTT do
     * `:keepalive_interval` the number of seconds between keep alives.
 
     * `:retry_interval` the number of seconds between reconnection
-      attepts if the client disconnects from the broker.
+      attempts if the client disconnects from the broker.
 
     * `:proto_version` which MQTT protocol version to use, defaults
       to version `3`.
@@ -383,11 +382,11 @@ defmodule GenMQTT do
       communicate with the broker and its respective options.
       The default transport is `{:gen_tcp, []}`. For basic SSL support
       use `{:ssl, ssl_options}`, which can be configured according to the
-      erlang documentation on the `:ssl` module.
+      erlang documentation on the `:ssl` module. <insert link to docs>
 
     * `info_fun` a function that can be passed in for logging,
       benchmarking, debugging, etc. It should not be used in
-      production.
+      production. <insert example - usage is not clear, also what args?>
 
   """
   @spec start_link(module, any, options) :: on_start
@@ -433,9 +432,9 @@ defmodule GenMQTT do
     end)
   end
 
-  # If no client id is set we will provide a randomly generated one.
+  # If no client ID is set we will provide a randomly generated one.
   # Notice that we need to keep the client name below 23 chars because
-  # the MQTT specs says so.
+  # the MQTT specs says so. <insert link to spec>
   #
   # Notice that we will not attempt any validation on the length of
   # user generated client ids because some MQTT servers may allow for
@@ -473,7 +472,7 @@ defmodule GenMQTT do
   Disconnect from the MQTT broker and stop the process.
 
   `on_disconnect/1` will not be triggered, if something needs to be
-  clearned up it can be done in the `terminate/2` callback, and the
+  cleaned up it can be done in the `terminate/2` callback, and the
   shutdown reason will be `:normal`
   """
   @spec disconnect(pid) :: :ok
