@@ -38,6 +38,6 @@ defmodule GenMQTT.Mixfile do
      {:ex_doc, "~> 0.11", only: :dev},
      {:earmark, "~> 0.1", only: :dev},
      {:gproc, "~> 0.5.0", only: :test},
-     {:dialyxir, "~> 0.3.3", only: [:dev, :test]}]
+     {:dialyze, "~> 0.2.1", only: [:dev, :test]}]
   end
 end
