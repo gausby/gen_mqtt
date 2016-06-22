@@ -106,6 +106,27 @@ defmodule GenMQTTTest do
     assert_receive {:published, ^pid1, ["foo"], "bar"}
   end
 
+  test "publishing retained messages" do
+    {:ok, pid1} = IntegrationTest.start_link(self)
+    assert_receive :connected
+
+    GenMQTT.publish(pid1, "foo", "retained", 0, true)
+    GenMQTT.publish(pid1, "bar", "not retained", 0, false)
+    # should default to retain:false
+    GenMQTT.publish(pid1, "baz", "not retained", 0)
+
+    {:ok, pid2} = IntegrationTest.start_link(self)
+    assert_receive :connected
+
+    GenMQTT.subscribe(pid2, "foo", 0)
+    GenMQTT.subscribe(pid2, "bar", 0)
+    GenMQTT.subscribe(pid2, "baz", 0)
+
+    assert_receive {:published, ^pid2, ["foo"], "retained"}
+    refute_receive {:published, ^pid2, ["bar"], "not retained"}
+    refute_receive {:published, ^pid2, ["baz"], "not retained"}
+  end
+
   test "connect and then disconnect" do
     {:ok, pid} = IntegrationTest.start_link(self)
     assert_receive :connected
