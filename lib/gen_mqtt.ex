@@ -115,6 +115,7 @@ defmodule GenMQTT do
   # gen_emqtt ----------------------------------------------------------
   @type topic :: [binary] | binary
   @type qos :: 0 | 1 | 2
+  @type retain :: boolean()
 
   @doc """
   Triggered when the client successfully establish a connection to the
@@ -506,13 +507,20 @@ defmodule GenMQTT do
 
   @doc """
   Publish `payload` to `topic` with quality of service set to `qos`
+
+  If `retain` is set to `true` the published message will be retained
+  on the topic, and delivered to new subscribers joining the
+  topic. Only one message per topic can be retained at a time; sending
+  a new retained message will overwrite the old one, regardless of the
+  publisher. `retain` defaults to `false`.
   """
-  @spec publish(pid, topic, payload :: binary, qos) :: :ok
-  def publish(pid, topic, payload, qos) when is_list(topic) do
-    :gen_emqtt.publish(pid, topic, payload, qos)
+  @spec publish(pid, topic, payload :: binary, qos, retain) :: :ok
+  def publish(pid, topic, payload, qos, retain \\ false)
+  def publish(pid, topic, payload, qos, retain) when is_list(topic) do
+    :gen_emqtt.publish(pid, topic, payload, qos, retain)
   end
-  def publish(pid, topic, payload, qos) when is_binary(topic) do
-    publish(pid, [topic], payload, qos)
+  def publish(pid, topic, payload, qos, retain) when is_binary(topic) do
+    publish(pid, [topic], payload, qos, retain)
   end
 
   @doc """
