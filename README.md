@@ -16,6 +16,8 @@ This project is available on hex, and it can be installed by adding the followin
   end
 ```
 
+**Notice**: If you want to use this module on Elixir prior to Elixir 1.3 you should add :vmq_commons as a dependency and specify that it should use `rebar3` to build it; this is done by adding this to the dependency list: `{:vmq_commons, "1.0.0", manager: :rebar3}`.
+
 This project should follow [Semantic Versioning 2.0.0](http://semver.org), so you should be safe if you fix the version number to a specific major or minor version. The project might change, if something can be done smarter or if the underlying `:gen_emqtt` implementation changes radically.
 
 
