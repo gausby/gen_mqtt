@@ -1,6 +1,6 @@
 defmodule GenMQTT do
   @moduledoc ~S"""
-  A behaviour module for implementing MMQT client processes.
+  A behaviour module for implementing MQTT client processes.
 
   ## Example
 
