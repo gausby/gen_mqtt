@@ -219,7 +219,7 @@ defmodule GenMQTT do
       end
 
       @doc false
-      def on_subscribe([{_topic, _qos}]=subscription, state) do
+      def on_subscribe([{_topic, _qos}] = subscription, state) do
         {:ok, state}
       end
 

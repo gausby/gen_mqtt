@@ -34,10 +34,13 @@ defmodule GenMQTT.Mixfile do
   end
 
   defp deps do
-    [{:vmq_commons, "1.0.0"},
-     {:ex_doc, "~> 0.16", only: :dev},
-     {:earmark, "~> 1.2", only: :dev},
-     {:gproc, "~> 0.6.1", only: :test},
-     {:dialyxir, "~> 0.5.1", only: [:dev, :test]}]
+    [
+      {:credo, "~> 0.8", only: [:dev, :test]},
+      {:dialyxir, "~> 0.5.1", only: [:dev, :test]},
+      {:earmark, "~> 1.2", only: :dev},
+      {:ex_doc, "~> 0.16", only: :dev},
+      {:gproc, "~> 0.6.1", only: :test},
+      {:vmq_commons, "1.0.0"}
+    ]
   end
 end
