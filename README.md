@@ -12,7 +12,7 @@ This project is available on hex, and it can be installed by adding the followin
 
 ``` elixir
   defp deps do
-    [{:gen_mqtt, "~> 0.3.1"}]
+    [{:gen_mqtt, "~> 0.4.0"}]
   end
 ```
 
