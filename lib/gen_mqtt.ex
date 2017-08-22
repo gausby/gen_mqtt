@@ -427,7 +427,7 @@ defmodule GenMQTT do
     end
   end
 
-  @cast_to_charlist [:host, :client, :last_will_topic, :last_will_msg]
+  @cast_to_char_list [:host, :client, :last_will_msg]
   defp normalize_options(opts) do
     Enum.map(opts, fn
       {key, val} when is_binary(val) and key in @cast_to_charlist ->
