@@ -219,7 +219,7 @@ defmodule GenMQTT do
       end
 
       @doc false
-      def on_subscribe([{_topic, _qos}]=subscription, state) do
+      def on_subscribe([{_topic, _qos}] = subscription, state) do
         {:ok, state}
       end
 
@@ -304,7 +304,7 @@ defmodule GenMQTT do
                        :suback | :subscribe_out |
                        :unsuback | :unsubscribe_out
   @type info_fun :: {
-    ({info_action, message_id :: char_list}, state :: term -> new_state :: term),
+    ({info_action, message_id :: charlist}, state :: term -> new_state :: term),
     initial_state :: term
   }
 
@@ -319,8 +319,8 @@ defmodule GenMQTT do
                   {:password, password :: binary | :undefined} |
                   {:client, client_id :: binary} |
                   {:clean_session, boolean} |
-                  {:last_will_topic, topic :: char_list | binary | :undefined} |
-                  {:last_will_msg, payload :: char_list | binary | :undefined} |
+                  {:last_will_topic, topic :: charlist | binary | :undefined} |
+                  {:last_will_msg, payload :: charlist | binary | :undefined} |
                   {:last_will_qos, qos} |
                   {:reconnect_timeout, pos_integer | :undefined} |
                   {:keepalive_interval, pos_integer} |
@@ -430,8 +430,8 @@ defmodule GenMQTT do
   @cast_to_char_list [:host, :client, :last_will_msg]
   defp normalize_options(opts) do
     Enum.map(opts, fn
-      {key, val} when is_binary(val) and key in @cast_to_char_list ->
-        {key, String.to_char_list(val)}
+      {key, val} when is_binary(val) and key in @cast_to_charlist ->
+        {key, String.to_charlist(val)}
 
       option ->
         option

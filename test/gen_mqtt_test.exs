@@ -19,7 +19,7 @@ defmodule GenMQTTTest do
     end
 
     def on_publish(topic, message, state) do
-      send state, {:published, self, topic, message}
+      send state, {:published, self(), topic, message}
       {:ok, state}
     end
 
@@ -43,21 +43,21 @@ defmodule GenMQTTTest do
   end
 
   test "should be able to link a process" do
-    assert {:ok, _pid} = IntegrationTest.start_link(self)
+    assert {:ok, _pid} = IntegrationTest.start_link(self())
   end
 
   test "should return already started if a named process has been started" do
-    assert {:ok, pid} = IntegrationTest.start_link(self, name: MyTestName)
-    assert {:error, {:already_started, ^pid}} = IntegrationTest.start_link(self, name: MyTestName)
+    assert {:ok, pid} = IntegrationTest.start_link(self(), name: MyTestName)
+    assert {:error, {:already_started, ^pid}} = IntegrationTest.start_link(self(), name: MyTestName)
   end
 
   test "should be able to connect" do
-    {:ok, _pid} = IntegrationTest.start_link(self)
+    {:ok, _pid} = IntegrationTest.start_link(self())
     assert_receive :connected
   end
 
   test "subscribe and then publish" do
-    {:ok, pid} = IntegrationTest.start_link(self)
+    {:ok, pid} = IntegrationTest.start_link(self())
     assert_receive :connected
 
     assert :ok = GenMQTT.subscribe(pid, "foo", 0)
@@ -68,7 +68,7 @@ defmodule GenMQTTTest do
   end
 
   test "subscribe and then unsubscribe" do
-    {:ok, pid} = IntegrationTest.start_link(self)
+    {:ok, pid} = IntegrationTest.start_link(self())
     assert_receive :connected
 
     assert :ok = GenMQTT.subscribe(pid, "foo", 0)
@@ -79,7 +79,7 @@ defmodule GenMQTTTest do
   end
 
   test "subscribe and then unsubscribe to multiple topics" do
-    {:ok, pid} = IntegrationTest.start_link(self)
+    {:ok, pid} = IntegrationTest.start_link(self())
     assert_receive :connected
 
     assert :ok = GenMQTT.subscribe(pid, [{"foo", 0}, {"bar", 1}])
@@ -93,9 +93,9 @@ defmodule GenMQTTTest do
   end
 
   test "publish and receive" do
-    {:ok, pid1} = IntegrationTest.start_link(self)
+    {:ok, pid1} = IntegrationTest.start_link(self())
     assert_receive :connected
-    {:ok, pid2} = IntegrationTest.start_link(self)
+    {:ok, pid2} = IntegrationTest.start_link(self())
     assert_receive :connected
 
     # subscribe to a topic on pid1
@@ -107,7 +107,7 @@ defmodule GenMQTTTest do
   end
 
   test "publishing retained messages" do
-    {:ok, pid1} = IntegrationTest.start_link(self)
+    {:ok, pid1} = IntegrationTest.start_link(self())
     assert_receive :connected
 
     GenMQTT.publish(pid1, "foo", "retained", 0, true)
@@ -115,7 +115,7 @@ defmodule GenMQTTTest do
     # should default to retain:false
     GenMQTT.publish(pid1, "baz", "not retained", 0)
 
-    {:ok, pid2} = IntegrationTest.start_link(self)
+    {:ok, pid2} = IntegrationTest.start_link(self())
     assert_receive :connected
 
     GenMQTT.subscribe(pid2, "foo", 0)
@@ -128,21 +128,21 @@ defmodule GenMQTTTest do
   end
 
   test "connect and then disconnect" do
-    {:ok, pid} = IntegrationTest.start_link(self)
+    {:ok, pid} = IntegrationTest.start_link(self())
     assert_receive :connected
     assert :ok = GenMQTT.disconnect(pid)
     assert_receive :shutdown
   end
 
   test "using info_fun" do
-    parent = self
+    parent = self()
     opts =
       [info_fun: {fn({event, _message_id}, state) ->
                    send parent, event
                    [event|state]
                  end, []}]
 
-    {:ok, pid} = IntegrationTest.start_link(self, opts)
+    {:ok, pid} = IntegrationTest.start_link(self(), opts)
     assert_receive :connack_in
     assert_receive :connected
     assert :ok = GenMQTT.disconnect(pid)
